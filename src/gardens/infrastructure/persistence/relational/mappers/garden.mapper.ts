@@ -1,10 +1,15 @@
 import { Garden } from '../../../../domain/garden';
+import { UserMapper } from '../../../../../users/infrastructure/persistence/relational/mappers/user.mapper';
 
 import { GardenEntity } from '../entities/garden.entity';
 
 export class GardenMapper {
   static toDomain(raw: GardenEntity): Garden {
     const domainEntity = new Garden();
+    if (raw.user) {
+      domainEntity.user = UserMapper.toDomain(raw.user);
+    }
+
     domainEntity.location = raw.location;
 
     domainEntity.name = raw.name;
@@ -18,6 +23,10 @@ export class GardenMapper {
 
   static toPersistence(domainEntity: Garden): GardenEntity {
     const persistenceEntity = new GardenEntity();
+    if (domainEntity.user) {
+      persistenceEntity.user = UserMapper.toPersistence(domainEntity.user);
+    }
+
     persistenceEntity.location = domainEntity.location;
 
     persistenceEntity.name = domainEntity.name;

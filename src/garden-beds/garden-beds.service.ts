@@ -7,7 +7,7 @@ import { UpdateGardenBedDto } from './dto/update-garden-bed.dto';
 import { GardenBedRepository } from './infrastructure/persistence/garden-bed.repository';
 import { IPaginationOptions } from '../utils/types/pagination-options';
 import { GardenBed } from './domain/garden-bed';
-import { Garden } from '../gardens/domain/garden'
+import { Garden } from '../gardens/domain/garden';
 
 @Injectable()
 export class GardenBedsService {

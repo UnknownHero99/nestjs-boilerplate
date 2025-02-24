@@ -1,3 +1,8 @@
+import { UsersService } from '../users/users.service';
+import { User } from '../users/domain/user';
+
+import { HttpStatus, UnprocessableEntityException } from '@nestjs/common';
+
 import { Injectable } from '@nestjs/common';
 import { CreateGardenDto } from './dto/create-garden.dto';
 import { UpdateGardenDto } from './dto/update-garden.dto';
@@ -8,6 +13,8 @@ import { Garden } from './domain/garden';
 @Injectable()
 export class GardensService {
   constructor(
+    private readonly userService: UsersService,
+
     // Dependencies here
     private readonly gardenRepository: GardenRepository,
   ) {}
@@ -15,10 +22,22 @@ export class GardensService {
   async create(createGardenDto: CreateGardenDto) {
     // Do not remove comment below.
     // <creating-property />
+    const userObject = await this.userService.findById(createGardenDto.user.id);
+    if (!userObject) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          user: 'notExists',
+        },
+      });
+    }
+    const user = userObject;
 
     return this.gardenRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      user,
+
       location: createGardenDto.location,
 
       name: createGardenDto.name,
@@ -53,10 +72,28 @@ export class GardensService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+    let user: User | undefined = undefined;
+
+    if (updateGardenDto.user) {
+      const userObject = await this.userService.findById(
+        updateGardenDto.user.id,
+      );
+      if (!userObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            user: 'notExists',
+          },
+        });
+      }
+      user = userObject;
+    }
 
     return this.gardenRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      user,
+
       location: updateGardenDto.location,
 
       name: updateGardenDto.name,
