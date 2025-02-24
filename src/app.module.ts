@@ -30,8 +30,14 @@ import { GardensModule } from './gardens/gardens.module';
 
 import { GardenBedsModule } from './garden-beds/garden-beds.module';
 
+import { SeedsModule } from './seeds/seeds.module';
+
+import { PlantsModule } from './plants/plants.module';
+
 @Module({
   imports: [
+    PlantsModule,
+    SeedsModule,
     GardenBedsModule,
     GardensModule,
     ConfigModule.forRoot({
