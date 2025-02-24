@@ -1,6 +1,13 @@
+import { Garden } from '../../gardens/domain/garden';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GardenBed {
+  @ApiProperty({
+    type: () => Garden,
+    nullable: true,
+  })
+  garden?: Garden | null;
+
   @ApiProperty({
     type: () => Number,
     nullable: true,
